@@ -1,14 +1,13 @@
+// 권수혁
+
 const express = require("express");
+const { addLike, removeLike } = require("../controller/LikeController");
 const router = express.Router();
 
 router.use(express.json());
 
-router.post("/:id", (req, res) => {
-  res.json("좋아요 추가");
-});
+router.post("/:id", addLike);
 
-router.delete("/:id", (req, res) => {
-  res.json("좋아요 삭제");
-});
+router.delete("/:id", removeLike);
 
 module.exports = router;

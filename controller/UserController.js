@@ -25,7 +25,12 @@ const join = (req, res) => {
       console.log(err);
       return res.status(StatusCodes.BAD_REQUEST).end();
     }
-    return res.status(StatusCodes.CREATED).json(results);
+
+    if (results.affectedRows) {
+      return res.status(StatusCodes.CREATED).json(results);
+    } else {
+      return res.status(StatusCodes.BAD_REQUEST).end();
+    }
   });
 };
 
@@ -50,6 +55,7 @@ const login = (req, res) => {
       // 토큰 발행
       const token = jwt.sign(
         {
+          id: loginUser.id,
           email: loginUser.email,
         },
         process.env.PRIVATE_KEY,
@@ -62,7 +68,7 @@ const login = (req, res) => {
       res.cookie("token", token, {
         httpOnly: true,
       });
-      console.log(token);
+
       return res.status(StatusCodes.OK).json(results);
     } else {
       return res.status(StatusCodes.UNAUTHORIZED).end();
